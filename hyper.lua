@@ -303,8 +303,20 @@ function grapefruit.run(bootfs,gpu,screen,log)
 	end
 	
 	local oslist = {}
-	oslist[#oslist+1] = grapefruit.createOS("dafaae5c-ed01-4ef8-92b7-631bc3d3fa88")
-	oslist[#oslist+1] = grapefruit.createOS("decb182d-8de2-4b29-b0eb-87d7bf816ac4")
+	_OSES = _OSES or {}
+	if #_OSES == 0 then
+		--find some operating systems to use--
+		for addr in component.list("filesystem") do
+			if addr ~= bootfs.address then
+				if component.invoke(addr,"exists","init.lua") then
+					_OSES[#_OSES+1] = addr
+				end
+			end
+		end
+	end
+	for i, v in ipairs(_OSES) do
+		oslist[#oslist+1] = grapefruit.createOS(v)
+	end
 	computer.pushSignal("init")
 	while true do
 		grapefruit.signal = {computer.pullSignal(0)}

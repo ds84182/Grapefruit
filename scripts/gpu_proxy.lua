@@ -3,8 +3,10 @@
 --TODO: Proxy keyboards
 
 local taken = {}
-taken[grapefruit.gpu.address] = grapefruit
-taken[grapefruit.screen] = grapefruit
+if _LOGTOSCREEN then
+	taken[grapefruit.gpu.address] = grapefruit
+	taken[grapefruit.screen] = grapefruit
+end
 grapefruit.onOSInit(function(os)
 	--find a gpu for it
 	for addr, comp in component.list("gpu") do
